@@ -8,7 +8,7 @@ class CustomUserDetails(
     private val member: Member
 ): UserDetails {
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        TODO("Not yet implemented")
+        return mutableListOf(GrantedAuthority { member.authority })
     }
 
     override fun getPassword(): String {

@@ -23,8 +23,9 @@ class JwtTokenProvider(
         secretKey = Base64.getEncoder().encodeToString(secretKey.toByteArray())
     }
 
-    fun createToken(userId: String, roles: List<String>): String{
-        val claims = Jwts.claims().setSubject(userId)
+    fun createToken(userId: String, roles: List<String>): String {
+        val claims = Jwts.claims()
+        claims.subject = userId
         claims["roles"] = roles
 
         val now = Date()
@@ -37,26 +38,25 @@ class JwtTokenProvider(
             .compact()
     }
 
-    fun getUserId(token: String): String{
+    fun getUserId(token: String): String {
         return Jwts.parser().setSigningKey(secretKey).parseClaimsJwt(token).body.subject
     }
 
-    fun getAuthentication(token: String): Authentication{
+    fun getAuthentication(token: String): Authentication {
         val userDetails = userDetailsService.loadUserByUsername(this.getUserId(token))
         return UsernamePasswordAuthenticationToken(userDetails, "", userDetails?.authorities)
     }
 
-    fun resolveToken(request: HttpServletRequest): String?{
+    fun resolveToken(request: HttpServletRequest): String? {
         return request.getHeader("authorization")
     }
 
-    fun validateToken(jwtToken: String): Boolean{
-        try{
+    fun validateToken(jwtToken: String): Boolean {
+        try {
             val claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken)
-            val isNotExpired = !claims.body.expiration.before(Date())
+            val isNotExpired = claims.body.expiration.after(Date())
             return isNotExpired
-        }
-        catch (e: Exception){
+        } catch (e: Exception) {
             return false
         }
     }

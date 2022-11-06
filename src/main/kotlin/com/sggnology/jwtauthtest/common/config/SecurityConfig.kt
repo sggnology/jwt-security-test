@@ -45,8 +45,12 @@ class SecurityConfig(
             .antMatchers("/admin/**").hasRole("ADMIN")
             .antMatchers("/**").permitAll()
 
-//        http
-//            .addFilterBefore(JwtAuth)
+        http
+            .addFilterBefore(JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter::class.java)
+
+        http
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
         return http.build()
     }

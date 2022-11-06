@@ -13,4 +13,6 @@ class Member {
     lateinit var username: String
 
     lateinit var password: String
+
+    lateinit var authority: String
 }

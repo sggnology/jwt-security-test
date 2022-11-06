@@ -24,6 +24,15 @@ class SecurityConfig(
 
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain{
+
+        /**
+         * 설명
+         * - x-frame-options 헤더 disable
+         * - clickjacking 공격을 막기 위해서 spring-security 가 자동적으로 켜둠
+         * */
+        http
+            .headers().frameOptions().disable()
+
         http
             .csrf().disable()
 

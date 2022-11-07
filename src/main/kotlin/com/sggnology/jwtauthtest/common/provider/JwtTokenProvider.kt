@@ -1,5 +1,6 @@
 package com.sggnology.jwtauthtest.common.provider
 
+import com.sggnology.jwtauthtest.common.auth.CustomUserDetailsService
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -12,7 +13,7 @@ import javax.servlet.http.HttpServletRequest
 
 @Component
 class JwtTokenProvider(
-    private val userDetailsService: UserDetailsService
+    private val customUserDetailsService: CustomUserDetailsService
 ) {
 
     private var secretKey: String = "jwt-request-test"
@@ -43,8 +44,8 @@ class JwtTokenProvider(
     }
 
     fun getAuthentication(token: String): Authentication {
-        val userDetails = userDetailsService.loadUserByUsername(this.getUserId(token))
-        return UsernamePasswordAuthenticationToken(userDetails, "", userDetails?.authorities)
+        val userDetails = customUserDetailsService.loadUserByUsername(this.getUserId(token))
+        return UsernamePasswordAuthenticationToken(userDetails, "", userDetails.authorities)
     }
 
     fun resolveToken(request: HttpServletRequest): String? {

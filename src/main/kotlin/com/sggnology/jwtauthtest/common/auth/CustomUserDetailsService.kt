@@ -11,9 +11,9 @@ import java.util.function.Supplier
 class CustomUserDetailsService(
     private val memberRepository: MemberRepository
 ): UserDetailsService {
-    override fun loadUserByUsername(username: String?): UserDetails {
+    override fun loadUserByUsername(username: String?): CustomUserDetails {
 
-        val member = memberRepository.findByUsername(username!!).orElseThrow(Supplier {UsernameNotFoundException("잘못된 아이디입니다.")})
+        val member = memberRepository.findByUsername(username!!).orElseThrow { UsernameNotFoundException("잘못된 아이디입니다.") }
 
         return CustomUserDetails(member)
     }

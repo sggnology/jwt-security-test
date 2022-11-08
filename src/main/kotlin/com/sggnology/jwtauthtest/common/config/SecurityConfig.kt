@@ -33,7 +33,7 @@ class SecurityConfig(
          * - clickjacking 공격을 막기 위해서 spring-security 가 자동적으로 켜둠
          * */
         http
-            .headers().frameOptions().disable()
+            .headers().frameOptions().sameOrigin()
 
         http
             .csrf().disable()

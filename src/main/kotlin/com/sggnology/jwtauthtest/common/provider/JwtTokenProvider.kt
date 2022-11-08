@@ -44,8 +44,8 @@ class JwtTokenProvider(
     }
 
     fun getAuthentication(token: String): Authentication {
-        val userDetails = customUserDetailsService.loadUserByUsername(this.getUserId(token))
-        return UsernamePasswordAuthenticationToken(userDetails, "", userDetails.authorities)
+        val customUserDetails = customUserDetailsService.loadUserByUsername(this.getUserId(token))
+        return UsernamePasswordAuthenticationToken(customUserDetails, "", customUserDetails.authorities)
     }
 
     fun resolveToken(request: HttpServletRequest): String? {

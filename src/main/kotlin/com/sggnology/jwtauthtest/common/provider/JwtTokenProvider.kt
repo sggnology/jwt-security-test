@@ -40,7 +40,7 @@ class JwtTokenProvider(
     }
 
     fun getUserId(token: String): String {
-        return Jwts.parser().setSigningKey(secretKey).parseClaimsJwt(token).body.subject
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).body.subject
     }
 
     fun getAuthentication(token: String): Authentication {
